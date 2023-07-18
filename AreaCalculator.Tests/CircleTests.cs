@@ -1,26 +1,35 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using AreaCalculator;
+namespace AreaCalculator.Tests;
 
-namespace AreaCalculator.Tests
+using FluentAssertions;
+using Xunit;
+
+public class CircleTests
 {
-    [TestFixture]
-    class CircleTests
+    public class CalculateAreaTests
     {
-        [Test]
-        public void GetArea_ValidParameters_ReturnCorrectResult()
+        [Fact]
+        public void CalculatesCorrectly()
         {
-            Circle circle = new Circle(5);
-            Assert.AreEqual(5 * 5 * Math.PI, circle.GetArea());
-        }
+            var circle = Circle.Create(5);
 
-        [Test]
-        public void GetArea_InvalidParameters_ReturnMinusOne()
+            var actual = circle.CalculateArea();
+
+            actual
+                .Should()
+                .Be(25 * Math.PI);
+        }
+    }
+
+    public class CreateTests
+    {
+        [Fact]
+        public void ThrowsArgumentExceptionWhenRadiusLessThenZero()
         {
-            Circle circle = new Circle(-5);
-            Assert.AreEqual(-1, circle.GetArea());
+            var func = () => Circle.Create(-1);
+
+            func
+                .Should()
+                .Throw<ArgumentException>();
         }
     }
 }

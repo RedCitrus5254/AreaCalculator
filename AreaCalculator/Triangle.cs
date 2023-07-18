@@ -1,36 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace AreaCalculator;
 
-namespace AreaCalculator
+using System;
+
+public class Triangle : IShape
 {
-    public class Triangle : IShape
+    private readonly double a;
+    private readonly double b;
+    private readonly double c;
+
+    private Triangle(
+        double a,
+        double b,
+        double c)
     {
-        private double A;
-        private double B;
-        private double C;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
 
-        public Triangle(double ASide, double BSide, double CSide)
+    public static Triangle Create(
+        double a,
+        double b,
+        double c)
+    {
+        if (a <= 0 || b <= 0 || c <= 0)
         {
-            A = ASide;
-            B = BSide;
-            C = CSide;
+            throw new ArgumentException();
         }
 
-        public double GetArea()
+        if (c > a + b || a > b + c || b > a + c)
         {
-            if (A <= 0 || B <= 0 || C <= 0)
-            {
-                return -1;
-            }
-            if (C > A + B || A > B + C || B > A + C)
-            {
-                return -1;
-            }
-
-            double halfPerimeter = (A + B + C) / 2;
-            double area = Math.Sqrt(halfPerimeter * (halfPerimeter - A) * (halfPerimeter - B) * (halfPerimeter - C));
-            return area;
+            throw new ArgumentException();
         }
+
+        return new Triangle(
+            a: a,
+            b: b,
+            c: c);
+    }
+
+    public double CalculateArea()
+    {
+        var halfPerimeter = (a + b + c) / 2;
+
+        return Math.Sqrt(halfPerimeter * (halfPerimeter - a) * (halfPerimeter - b) * (halfPerimeter - c));
+    }
+
+    public bool IsRectangular()
+    {
+        if (a * a == b * b + c * c ||
+            b * b == a * a + c * c ||
+            c * c == a * a + b * b)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

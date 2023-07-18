@@ -1,28 +1,70 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
+namespace AreaCalculator.Tests;
 
-namespace AreaCalculator.Tests
+using FluentAssertions;
+using Xunit;
+
+public class TriangleTests
 {
-    [TestFixture]
-    class TriangleTests
+    public class CalculateAreaTests
     {
-        [Test]
-        public void GetArea_ValidParameters_ReturnCorrectResult()
+        [Fact]
+        public void CalculatesCorrectly()
         {
-            Triangle triangle = new Triangle(3, 4, 5);
-            Assert.AreEqual(6, triangle.GetArea());
+            var triangle = Triangle.Create(a: 3, b: 4, c: 5);
+
+            var actual = triangle.CalculateArea();
+
+            actual
+                .Should()
+                .Be(6);
+        }
+    }
+
+    public class CreateTests
+    {
+        [Fact]
+        public void ThrowsArgumentExceptionWhenSideLessThenZero()
+        {
+            var func = () => Triangle.Create(a: -1, b: 4, c: 5);
+
+            func
+                .Should()
+                .Throw<ArgumentException>();
         }
 
-        [Test]
-        public void GetArea_InvalidParameters_ReturnMinusOne()
+        [Fact]
+        public void ThrowsArgumentExceptionWhenNotTriangle()
         {
-            Triangle triangle1 = new Triangle(-1, 0, 5);
-            Assert.AreEqual(-1, triangle1.GetArea());
+            var func = () => Triangle.Create(a: 1, b: 1, c: 500);
 
-            Triangle triangle2 = new Triangle(1, 3, 1);
-            Assert.AreEqual(-1, triangle1.GetArea());
+            func
+                .Should()
+                .Throw<ArgumentException>();
+        }
+    }
+
+    public class IsRectangularTests
+    {
+        [Fact]
+        public void TrueWhenRectangular()
+        {
+            var triangle = Triangle.Create(a: 3, b: 4, c: 5);
+
+            triangle
+                .IsRectangular()
+                .Should()
+                .Be(true);
+        }
+
+        [Fact]
+        public void FalseWhenNotRectangular()
+        {
+            var triangle = Triangle.Create(a: 1, b: 1, c: 1);
+
+            triangle
+                .IsRectangular()
+                .Should()
+                .Be(false);
         }
     }
 }

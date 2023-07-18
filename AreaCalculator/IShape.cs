@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace AreaCalculator;
 
-namespace AreaCalculator
+interface IShape
 {
-    interface IShape
-    {
-        double GetArea();
-    }
+    double CalculateArea();
 }

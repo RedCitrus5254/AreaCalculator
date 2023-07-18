@@ -1,26 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace AreaCalculator;
 
-namespace AreaCalculator
+using System;
+
+public class Circle : IShape
 {
-    public class Circle : IShape
+    private double radius;
+
+    private Circle(
+        double radius)
     {
-        private double radius;
+        this.radius = radius;
+    }
 
-        public Circle(double radius)
+    public static Circle Create(
+        double radius)
+    {
+        if (radius <= 0)
         {
-            this.radius = radius;
+            throw new ArgumentException();
         }
 
-        public double GetArea()
-        {
-            if (radius < 0)
-            {
-                return -1;
-            }
+        return new Circle(
+            radius: radius);
+    }
 
-            return Math.PI * radius * radius;
-        }
+    public double CalculateArea()
+    {
+        return Math.PI * radius * radius;
     }
 }
+
